@@ -8,5 +8,7 @@ const router = express.Router();
 router.post('/',userController.registerUser);
 router.post('/login',userController.loginUser);
 router.get('/',checkAuth,userController.findAllUsers);
+router.delete('/',checkAuth,userController.removeUser);
+
 
 module.exports = router;

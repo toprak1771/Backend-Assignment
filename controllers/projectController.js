@@ -7,6 +7,11 @@ exports.insertProject = async (req, res, next) => {
   const name = req.body.name;
   const status = req.body.status;
 
+  if (!name || !status)
+    return res.status(400).json({
+      error: "Name or status is empty",
+    });
+
   const project = {
     name: name,
     status: status,
@@ -52,11 +57,46 @@ exports.insertProject = async (req, res, next) => {
     });
 };
 
-exports.findAllProjects = async (req,res,next) => {
-  const projects = await projectRepository.getAllProject();
-  console.log("projects:",projects);
-  res.status(200).json({
-    message:'success',
-    projects:projects,
-  })
-}
+exports.findAllProjects = (req, res, next) => {
+  projectRepository
+    .getAllProject()
+    .then((projects) => {
+      console.log("projects:", projects);
+      res.status(200).json({
+        message: "success",
+        projects: projects,
+      });
+    })
+    .catch((err) => {
+      console.log("error:", err);
+      return res.status(400).json({
+        status: "error",
+        message: err.message,
+      });
+    });
+};
+
+exports.removeProject = async (req, res, next) => {
+  const projectId = req.body.projectId;
+
+  if (!projectId)
+    return res.status(400).json({
+      error: "Project id is empty",
+    });
+
+  projectRepository
+    .deleteProject(projectId)
+    .then((result) => {
+      return res.status(200).json({
+        status: "success",
+        message: "Remove project and associated user successfully.",
+      });
+    })
+    .catch((err) => {
+      console.log("error:", err);
+      return res.status(400).json({
+        status: "error",
+        message: err.message,
+      });
+    });
+};

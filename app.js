@@ -5,10 +5,10 @@ const User = require("./models/user");
 const Project = require("./models/project");
 const UserProject = require("./models/userProject");
 const userRoutes = require("./routes/user");
-const projectRoutes = require('./routes/project');
+const projectRoutes = require("./routes/project");
 const multer = require("multer");
 const app = express();
-const fs = require('fs');
+const fs = require("fs");
 const port = 3000;
 
 //middlewares
@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadDir = "tmp";
-    if(!fs.existsSync(uploadDir)){
+    if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir);
     }
     cb(null, "tmp");
@@ -55,12 +55,12 @@ app.use(
 );
 
 //Associations models
-User.belongsToMany(Project, { through: "user-project" });
-Project.belongsToMany(User, { through: "user-project" });
+User.belongsToMany(Project, { through: "user-project", onDelete: "CASCADE" });
+Project.belongsToMany(User, { through: "user-project", onDelete: "CASCADE" });
 
 //routes
 app.use("/user", userRoutes);
-app.use("/project",projectRoutes);
+app.use("/project", projectRoutes);
 
 //sequelize
 sequelize

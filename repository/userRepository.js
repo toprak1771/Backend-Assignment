@@ -66,3 +66,21 @@ exports.getAllUser = () => {
     return resolve(users);
   });
 };
+
+exports.deleteUser = (userId) => {
+  const delUser = User.destroy({
+    where: {
+      id: userId,
+    },
+  })
+    .then((result) => {
+      console.log("result:", result);
+      return result;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return new Promise((resolve, reject) => {
+    return resolve(delUser);
+  });
+};

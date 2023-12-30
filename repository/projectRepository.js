@@ -39,3 +39,21 @@ exports.getAllProject = () => {
     return resolve(projects);
   });
 };
+
+exports.deleteProject = (projectId) => {
+  const delProjectId = Project.destroy({
+    where: {
+      id: projectId,
+    },
+  })
+    .then((result) => {
+      console.log("result:", result);
+      return result;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return new Promise((resolve, reject) => {
+    return resolve(delProjectId);
+  });
+};

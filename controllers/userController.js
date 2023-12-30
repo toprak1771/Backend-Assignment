@@ -9,10 +9,12 @@ exports.registerUser = async (req, res, next) => {
   const password = req.body.password;
   const user = req.body;
   const image = req.file;
+
   if (!username || !password || !image)
     return res.status(400).json({
       error: "username,password or image is empty",
     });
+
   try {
     user.password = await bcrypt.hash(user.password, 10);
     user.image = image.path;
@@ -25,10 +27,10 @@ exports.registerUser = async (req, res, next) => {
         });
       })
       .catch((err) => {
-        console.log("error:", error);
+        console.log("error:", err);
         return res.status(400).json({
           status: "error",
-          message: error.message,
+          message: err.message,
         });
       });
   } catch (error) {
@@ -92,11 +94,46 @@ exports.loginUser = async (req, res, next) => {
   }
 };
 
-exports.findAllUsers = async (req, res, next) => {
-  const users = await userRepository.getAllUser();
-  console.log("users:", users);
-  res.status(200).json({
-    message: "success",
-    users: users,
-  });
+exports.findAllUsers = (req, res, next) => {
+  userRepository
+    .getAllUser()
+    .then((users) => {
+      console.log("users:", users);
+      res.status(200).json({
+        message: "success",
+        users: users,
+      });
+    })
+    .catch((error) => {
+      console.log("error:", error);
+      return res.status(400).json({
+        status: "error",
+        message: error.message,
+      });
+    });
+};
+
+exports.removeUser = async (req, res, next) => {
+  const userId = req.body.userId;
+
+  if (!userId)
+    return res.status(400).json({
+      error: "User id is empty",
+    });
+
+  userRepository
+    .deleteUser(userId)
+    .then((result) => {
+      return res.status(200).json({
+        status: "success",
+        message: "Remove user and associated project successfully.",
+      });
+    })
+    .catch((err) => {
+      console.log("error:", err);
+      return res.status(400).json({
+        status: "error",
+        message: err.message,
+      });
+    });
 };
