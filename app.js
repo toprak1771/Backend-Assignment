@@ -13,8 +13,8 @@ const port = 3000;
 
 //middlewares
 app.use(express.json());
-app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(bodyParser.json()); // for parsing application/json
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -23,6 +23,7 @@ app.get("/", (req, res) => {
 //multer
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
+    console.log("file:", file);
     const uploadDir = "tmp";
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir);

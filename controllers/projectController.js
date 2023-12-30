@@ -76,7 +76,7 @@ exports.findAllProjects = (req, res, next) => {
     });
 };
 
-exports.removeProject = async (req, res, next) => {
+exports.removeProject = (req, res, next) => {
   const projectId = req.body.projectId;
 
   if (!projectId)
@@ -90,6 +90,33 @@ exports.removeProject = async (req, res, next) => {
       return res.status(200).json({
         status: "success",
         message: "Remove project and associated user successfully.",
+      });
+    })
+    .catch((err) => {
+      console.log("error:", err);
+      return res.status(400).json({
+        status: "error",
+        message: err.message,
+      });
+    });
+};
+
+exports.updateProject = (req, res, next) => {
+  const _updatedProject = req.body.project;
+  const projectId = req.body.projectId;
+
+  if (!projectId || !_updatedProject)
+    return res.status(400).json({
+      error: "Project id or project data is empty",
+    });
+
+  projectRepository
+    .updateProject(_updatedProject, projectId)
+    .then((result) => {
+      console.log("result2:", result);
+      return res.status(200).json({
+        status: "success",
+        message: "Update project successfully.",
       });
     })
     .catch((err) => {

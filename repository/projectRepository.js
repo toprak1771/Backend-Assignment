@@ -57,3 +57,21 @@ exports.deleteProject = (projectId) => {
     return resolve(delProjectId);
   });
 };
+
+exports.updateProject = (updatedProject, projectId) => {
+  const _updatedProject = Project.update(updatedProject, {
+    where: {
+      id: projectId,
+    },
+  })
+    .then((result) => {
+      console.log("result:", result);
+      return result;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return new Promise((resolve, reject) => {
+    return resolve(_updatedProject);
+  });
+};

@@ -45,7 +45,6 @@ exports.getUserWithId = (userId) => {
   });
 };
 
-
 exports.getAllUser = () => {
   const users = User.findAll({
     include: [
@@ -82,5 +81,23 @@ exports.deleteUser = (userId) => {
     });
   return new Promise((resolve, reject) => {
     return resolve(delUser);
+  });
+};
+
+exports.updateUser = (updatedUser, userId) => {
+  const _updatedUser = User.update(updatedUser, {
+    where: {
+      id: userId,
+    },
+  })
+    .then((result) => {
+      console.log("result:", result);
+      return result;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  return new Promise((resolve, reject) => {
+    return resolve(_updatedUser);
   });
 };
