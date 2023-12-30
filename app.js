@@ -56,6 +56,7 @@ app.use(
 
 //Associations models
 User.belongsToMany(Project, { through: "user-project" });
+Project.belongsToMany(User, { through: "user-project" });
 
 //routes
 app.use("/user", userRoutes);

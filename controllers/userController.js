@@ -59,7 +59,7 @@ exports.loginUser = async (req, res, next) => {
 
     if (comparePassword) {
       const accessToken = jwt.sign(
-        { username: user.username },
+        { id: user.id, username: user.username },
         process.env.JWT_SECRET,
         {
           expiresIn: process.env.JWT_EXPIRES_IN,
@@ -90,4 +90,13 @@ exports.loginUser = async (req, res, next) => {
       message: error.message,
     });
   }
+};
+
+exports.findAllUsers = async (req, res, next) => {
+  const users = await userRepository.getAllUser();
+  console.log("users:", users);
+  res.status(200).json({
+    message: "success",
+    users: users,
+  });
 };
